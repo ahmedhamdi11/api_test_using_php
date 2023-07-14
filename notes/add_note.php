@@ -6,7 +6,11 @@
     $title      = postRequest('title');
     $content    = postRequest('content');
     $userId     = postRequest('user_id');
-    $note_image = uploadImage('image');
+    $note_image = postRequest('note_image');
+
+    if(isset($_FILES['image'])){
+        $note_image = uploadImage('image');
+    }
 
     if($note_image !='faild to upload'){
         $stmt = $connect->prepare("
