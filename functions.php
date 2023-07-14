@@ -1,11 +1,13 @@
 <?php
   
   define('MB', 1048576);
-
+  
+  // post request
   function postRequest($requestName){
     return htmlspecialchars(strip_tags($_POST[$requestName]));
   }
-
+  
+  // upload image fn
   function uploadImage($imageRequest){
 
     $imageName = rand(0,10000).$_FILES[$imageRequest]['name'];
@@ -29,11 +31,21 @@
     }
 
     if(empty($errMessage)){
-      move_uploaded_file( $imageTmp , '../upladed_images/'.$imageName );
+      move_uploaded_file( $imageTmp , '../uploaded_images/'.$imageName );
       return $imageName;
     }else{
       return 'faild to upload' ;
     }
 
   }
+
+  //delete image fn
+  function deleteImage($dir, $imageName){
+    $imagePath = $dir.$imageName;
+    
+    if(file_exists($imagePath)){
+      unlink($imagePath);
+    }
+  }
+
 ?>
