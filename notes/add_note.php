@@ -3,21 +3,30 @@
     include('../connect.php');
     include('../functions.php');
 
-    $title = postRequest('title');
-    $content = postRequest('content');
-    $userId = postRequest('user_id');
+    $title      = postRequest('title');
+    $content    = postRequest('content');
+    $userId     = postRequest('user_id');
+    $note_image = uploadImage('image');
 
-    $stmt = $connect->prepare("INSERT INTO `notes` (`note_title`,`note_content`,`note_user`) VALUES (?,?,?)");
-    $stmt->execute(array($title,$content,$userId));
+    if($note_image !='faild to upload'){
+        $stmt = $connect->prepare("
+        INSERT INTO `notes` 
+        (`note_title`,`note_content`,`note_image`,`note_user`)
+        VALUES (?,?,?,?)
+        ");
+        $stmt->execute(array( $title, $content, $note_image, $userId ));
 
-    $count=$stmt->rowCount();
+        $count=$stmt->rowCount();
 
-    if($count >0){
-        echo json_encode(array('status'=>'success'));
+        if($count >0){
+            echo json_encode(array('status'=>'success'));
 
+        }else{
+
+            echo json_encode(array('status'=>'failed'));
+        }
     }else{
-
-        echo json_encode(array('status'=>'failed'));
+        echo json_encode(array('status'=>'failed', 'message'=>'faild to upload image'));
     }
 
 ?>
